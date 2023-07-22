@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import clsx from 'clsx'
-
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
 import { Container } from '@/components/Container'
@@ -247,6 +247,9 @@ function Photos() {
 }
 
 export default function Home({ articles }) {
+  const [searchText, setSearchText] = useState('')
+  const [searchResult, setSearchResult] = useState('')
+
   return (
     <>
       <Head>
@@ -261,9 +264,9 @@ export default function Home({ articles }) {
           <h1 className="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
             Film god
           </h1>
+
           <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-            You like movies? I bet they suck. Only the movies I like are worth
-            seeing. Otherwise, you're stupid.
+            You like movies? I bet they suck.
           </p>
           <div className="mt-6 flex gap-6">
             <SocialLink
@@ -286,16 +289,53 @@ export default function Home({ articles }) {
       </Container>
       <Photos />
       <Container className="mt-24 md:mt-28">
-        <div className="mx-auto grid max-w-xl grid-cols-1 gap-y-20 lg:max-w-none lg:grid-cols-2">
-          <div className="flex flex-col gap-16">
-            {articles.map((article) => (
-              <Article key={article.slug} article={article} />
-            ))}
-          </div>
-          <div className="space-y-10 lg:pl-16 xl:pl-24">
-            {/* <Newsletter /> */}
-            {/* <Resume /> */}
-          </div>
+        <div class="w-full ">
+          <form
+            class="mb-4 rounded px-8 pb-8 pt-6 "
+            onSubmit={(e) => {
+              e.preventDefault()
+            }}
+          >
+            <div class="mb-4">
+              <input
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                onClick={() => {
+                  setSearchResult('')
+                  setSearchText('')
+                }}
+                class="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+                id="username"
+                type="text"
+                placeholder="Type a movie name"
+              />
+            </div>
+
+            <div class="flex items-center justify-between">
+              <button
+                onClick={() => {
+                  const arr = [
+                    'Awful',
+                    'Terrible',
+                    'Worst movie ever',
+                    'Should have gone to see Barbie',
+                    'Yuck',
+                    'Hated it',
+                    'Marvel is better',
+                    'Pedestrian at best',
+                  ]
+                  setSearchResult(arr[Math.floor(Math.random() * arr.length)])
+                }}
+                class="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+                type="button"
+              >
+                Find Review
+              </button>
+            </div>
+            <div class="py-8">
+              <p className="text-white">{searchResult}</p>
+            </div>
+          </form>
         </div>
       </Container>
     </>
